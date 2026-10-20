@@ -128,6 +128,7 @@
             margin-bottom: 45px;
             text-align: center;
             letter-spacing: -0.02em;
+            position: relative;
         }
 
         .section-title span {
@@ -135,6 +136,26 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        /* Пульсирующее подчёркивание заголовка секции */
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -12px;
+            transform: translateX(-50%) scaleX(0.4);
+            transform-origin: center;
+            width: 130px;
+            height: 3px;
+            border-radius: 3px;
+            background: var(--gradient-accent);
+            animation: titleUnderline 3.2s ease-in-out infinite;
+        }
+
+        @keyframes titleUnderline {
+            0%, 100% { transform: translateX(-50%) scaleX(0.4); }
+            50% { transform: translateX(-50%) scaleX(1); }
         }
 
         .btn {
@@ -150,6 +171,8 @@
             box-shadow: 0 8px 20px rgba(124, 92, 255, 0.35);
             transition: background-position var(--transition), transform var(--transition), box-shadow var(--transition);
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn:hover {
@@ -161,6 +184,28 @@
         .btn:active {
             transform: translateY(-1px);
             box-shadow: 0 6px 14px rgba(124, 92, 255, 0.3);
+        }
+
+        /* Блик, пробегающий по кнопке при наведении */
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+            transform: skewX(-20deg);
+            pointer-events: none;
+        }
+
+        .btn:hover::after {
+            animation: btnShine 0.7s ease;
+        }
+
+        @keyframes btnShine {
+            from { left: -100%; }
+            to { left: 120%; }
         }
 
         /* ===== ШАПКА ===== */
@@ -249,6 +294,14 @@
 
         .cart-wrapper:hover .cart-icon {
             color: var(--accent-light);
+            animation: cartWiggle 0.5s ease;
+        }
+
+        @keyframes cartWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-14deg); }
+            50% { transform: rotate(12deg); }
+            75% { transform: rotate(-7deg); }
         }
 
         .cart-badge {
@@ -482,6 +535,16 @@
             z-index: 1;
         }
 
+        /* Медленное «дыхание» световых пятен на фоне hero */
+        .hero::before {
+            animation: heroGlow 14s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroGlow {
+            from { transform: translateX(-1.5%) translateY(0) scale(1); }
+            to { transform: translateX(1.5%) translateY(-2%) scale(1.04); }
+        }
+
         .hero .container {
             position: relative;
             z-index: 2;
@@ -513,6 +576,35 @@
         .hero .btn {
             padding: 16px 44px;
             font-size: 1.05rem;
+        }
+
+        /* Каскадное появление контента hero при загрузке */
+        .hero h1,
+        .hero p,
+        .hero .btn {
+            opacity: 0;
+            transform: translateY(26px);
+            animation: heroEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero h1 { animation-delay: 0.1s; }
+        .hero p { animation-delay: 0.35s; }
+        .hero .btn { animation-delay: 0.6s; }
+
+        @keyframes heroEntrance {
+            from { opacity: 0; transform: translateY(26px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Переливающийся градиент в заголовке hero */
+        .hero h1 span {
+            background-size: 220% 100%;
+            animation: gradientShift 5s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         /* Плавающие ноты */
@@ -640,7 +732,19 @@
             position: relative;
             overflow: hidden;
             background-color: #f1eefc;
+            background-image: linear-gradient(100deg, #f1eefc 0%, #e3dcf6 45%, #f1eefc 90%);
+            background-size: 220% 100%;
+            animation: imgShimmer 1.4s ease-in-out infinite;
             z-index: 1;
+        }
+
+        .product-image.loaded {
+            animation: none;
+        }
+
+        @keyframes imgShimmer {
+            0% { background-position: 0% 0; }
+            100% { background-position: -220% 0; }
         }
 
         .product-image::after {
@@ -677,6 +781,12 @@
             letter-spacing: 0.8px;
             box-shadow: 0 4px 14px rgba(255, 107, 157, 0.45);
             z-index: 2;
+            animation: badgePulse 2.4s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.07); }
         }
 
         .product-info {
@@ -762,6 +872,12 @@
             color: var(--text-light);
             border-color: transparent;
             box-shadow: 0 6px 16px rgba(124, 92, 255, 0.4);
+            animation: pagePulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes pagePulse {
+            0%, 100% { box-shadow: 0 6px 16px rgba(124, 92, 255, 0.4); }
+            50% { box-shadow: 0 10px 26px rgba(124, 92, 255, 0.65); }
         }
 
         /* ===== О КОМПАНИИ ===== */
@@ -1011,6 +1127,12 @@
 
         .form-message.success {
             color: #2ecc71;
+            animation: messagePop 0.5s ease;
+        }
+
+        @keyframes messagePop {
+            0% { opacity: 0; transform: translateY(6px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         /* ===== ФУТЕР ===== */
@@ -1238,6 +1360,67 @@
         .reveal-delay-2 { transition-delay: 0.24s; }
         .reveal-delay-3 { transition-delay: 0.36s; }
 
+        /* ===== ИНДИКАТОР ПРОКРУТКИ СТРАНИЦЫ ===== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: var(--gradient-accent);
+            border-radius: 2px;
+            z-index: 1000;
+            transition: width 0.12s linear;
+        }
+
+        /* ===== КНОПКА «НАВЕРХ» ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--gradient-accent);
+            color: var(--text-light);
+            font-size: 1.35rem;
+            line-height: 1;
+            box-shadow: 0 10px 24px rgba(124, 92, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(24px) scale(0.7);
+            pointer-events: none;
+            transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+            z-index: 900;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-4px) scale(1.06);
+            box-shadow: 0 16px 34px rgba(124, 92, 255, 0.55);
+        }
+
+        .back-to-top:active {
+            transform: translateY(0) scale(0.95);
+        }
+
+        /* ===== ПАРЯЩАЯ ГИТАРА В БЛОКЕ «О КОМПАНИИ» ===== */
+        .about-guitar {
+            animation: floatBob 3.5s ease-in-out infinite;
+        }
+
+        @keyframes floatBob {
+            0%, 100% { transform: translateY(0) rotate(-4deg); }
+            50% { transform: translateY(-12px) rotate(4deg); }
+        }
+
         /* ===== ПОДДЕРЖКА prefers-reduced-motion ===== */
         @media (prefers-reduced-motion: reduce) {
             * {
@@ -1259,6 +1442,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Индикатор прогресса прокрутки страницы -->
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
     <!-- ===== ШАПКА ===== -->
     <header>
@@ -1376,7 +1562,7 @@
                     </div>
                     <div class="about-text reveal reveal-delay-2">
                         <div style="background: linear-gradient(160deg, #f4efff 0%, #ffe9f2 100%); border-radius: var(--radius); padding: 45px 40px; text-align: center; border: 1px solid rgba(124, 92, 255, 0.15); box-shadow: var(--shadow-md); position: relative; overflow: hidden;">
-                            <span style="font-size: 4.2rem; display: block; margin-bottom: 20px; filter: drop-shadow(0 8px 20px rgba(124, 92, 255, 0.3));" aria-hidden="true">🎸</span>
+                            <span class="about-guitar" style="font-size: 4.2rem; display: block; margin-bottom: 20px; filter: drop-shadow(0 8px 20px rgba(124, 92, 255, 0.3));" aria-hidden="true">🎸</span>
                             <h3 style="font-size: 1.3rem; margin-bottom: 10px; color: var(--text-main);">Более 5000 инструментов</h3>
                             <p style="color: var(--text-muted); font-size: 0.95rem;">В нашем каталоге представлены гитары, клавишные, ударные, духовые инструменты и синтезаторы от лучших брендов мира.</p>
                         </div>
@@ -1516,7 +1702,7 @@
             grid.innerHTML = pageItems.map((product, i) => `
                 <article class="product-card reveal reveal-delay-${(i % 3) + 1}">
                     <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="handleImageError(this)">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="handleImageError(this)" onload="this.closest('.product-image').classList.add('loaded')">
                         ${product.hit ? '<span class="badge-hit">Хит</span>' : ''}
                     </div>
                     <div class="product-info">
@@ -1772,6 +1958,15 @@
             formMessage.className = 'form-message success';
             emailInput.classList.remove('error');
             emailInput.value = '';
+
+            // Анимация кнопки при успешной подписке
+            const subscribeBtn = document.querySelector('.subscribe-form .btn');
+            subscribeBtn.classList.add('added');
+            subscribeBtn.textContent = '✓ Подписано';
+            setTimeout(() => {
+                subscribeBtn.classList.remove('added');
+                subscribeBtn.textContent = 'Подписаться';
+            }, 2000);
         });
 
         emailInput.addEventListener('input', () => {
@@ -1798,12 +1993,83 @@
             els.forEach(el => observer.observe(el));
         }
 
+        // ===== 6.2. ДОПОЛНИТЕЛЬНЫЕ АНИМАЦИИ =====
+        // Индикатор прогресса прокрутки и кнопка «Наверх»
+        const scrollProgress = document.getElementById('scrollProgress');
+        const backToTop = document.getElementById('backToTop');
+
+        function getScrollTop() {
+            return window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+        }
+
+        function updateScrollUI() {
+            const scrollTop = getScrollTop();
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            scrollProgress.style.width = progress + '%';
+
+            if (scrollTop > 600) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        }
+
+        window.addEventListener('scroll', updateScrollUI, { passive: true });
+        window.addEventListener('resize', updateScrollUI);
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Анимированный счётчик статистики
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            if (!('IntersectionObserver' in window)) {
+                statNumbers.forEach(el => countUp(el));
+                return;
+            }
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        countUp(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.4 });
+            statNumbers.forEach(el => observer.observe(el));
+        }
+
+        function countUp(el) {
+            const match = el.textContent.match(/^([\d.]+)(.*)$/);
+            if (!match) return;
+            const target = parseFloat(match[1]);
+            const suffix = match[2];
+            const isFloat = match[1].includes('.');
+            const duration = 1300;
+            const start = performance.now();
+
+            function tick(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const value = target * eased;
+                el.textContent = (isFloat ? value.toFixed(1) : Math.round(value)) + suffix;
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }
+
         // ===== 7. ИНИЦИАЛИЗАЦИЯ =====
         document.addEventListener('DOMContentLoaded', () => {
             renderCatalog();
             updateCartUI();
             setupReveal();
+            animateStats();
+            updateScrollUI();
         });
     </script>
+
+    <!-- Кнопка «Наверх» -->
+    <button class="back-to-top" id="backToTop" aria-label="Наверх">↑</button>
 </body>
 </html>
